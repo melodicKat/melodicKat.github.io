@@ -4,18 +4,6 @@ title: About
 permalink: /about/
 icon: fas fa-user
 ---
-
-<div align="center">
-
-# Nguyễn Giáp Anh Khoa
-
-**Information Security Student @ HUIT**  
-Aspiring Penetration Tester | CTF Player | Security Research Enthusiast
-
-</div>
-
----
-
 ## 👋 Hello!
 
 I'm **Nguyễn Giáp Anh Khoa**, a third-year Information Security student at **Ho Chi Minh City University of Industry and Trade (HUIT)**, expected to graduate in **2027**.
