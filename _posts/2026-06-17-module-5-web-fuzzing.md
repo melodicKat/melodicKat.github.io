@@ -3,11 +3,12 @@ title: "Module 5: Web fuzzing"
 date: 2026-06-17 11:32:44 +0700
 categories: [hack-the-box, web-penetration-tester-path]
 tags: [learning, red-team, htb, cwes]
+render_with_liquid: false
 ---
 
-# 2. TASK
+## 2. TASK
 
-## **SECTION 3: Directory and File Fuzzing**
+### SECTION 3: Directory and File Fuzzing
 
 directory fuzzing
 
@@ -17,7 +18,7 @@ files fuzzing
 
 ![image.png](/assets/img/module-5-web-fuzzing/module-5-web-fuzzing-image-1.png)
 
-### **Question 1**
+#### Question 1
 
 ---
 
@@ -29,21 +30,21 @@ files fuzzing
 
 ![image.png](/assets/img/module-5-web-fuzzing/module-5-web-fuzzing-image-4.png)
 
-## **SECTION 4: Recursive Fuzzing**
+### SECTION 4: Recursive Fuzzing
 
-### **Question 1**
+#### Question 1
 
 ---
 
-**Recursively fuzz the "recursive_fuzz" path on the target system (ie http://IP:PORT/recursive_fuzz/) to find the flag:** 
+**Recursively fuzz the "recursive_fuzz" path on the target system (ie http://IP:PORT/recursive_fuzz/) to find the flag:**
 
 ![image.png](/assets/img/module-5-web-fuzzing/module-5-web-fuzzing-image-5.png)
 
 ![image.png](/assets/img/module-5-web-fuzzing/module-5-web-fuzzing-image-6.png)
 
-## SECTION 5: **Parameter and Value Fuzzing**
+### SECTION 5: **Parameter and Value Fuzzing**
 
-## **Question 1**
+### Question 1
 
 ---
 
@@ -53,7 +54,7 @@ What flag do you find when successfully fuzzing the GET parameter? HTB{g3t_fuzz1
 
 ![image.png](/assets/img/module-5-web-fuzzing/module-5-web-fuzzing-image-7.png)
 
-## **Question 2**
+### Question 2
 
 ---
 
@@ -63,31 +64,31 @@ What flag do you find when successfully fuzzing the GET parameter? HTB{g3t_fuzz1
 
 ![image.png](/assets/img/module-5-web-fuzzing/module-5-web-fuzzing-image-8.png)
 
-## **SECTION 6: Virtual Host and Subdomain Fuzzing**
+### SECTION 6: Virtual Host and Subdomain Fuzzing
 
-### Question 1
+#### Question 1
 
 Using GoBuster against the target system to fuzz for vhosts using the common.txt wordlist, which vhost starts with the prefix "web-"? Respond with the full vhost, eg web-123.inlanefreight.htb: web-beans.inlanefreight.htb
 
 ![image.png](/assets/img/module-5-web-fuzzing/module-5-web-fuzzing-image-9.png)
 
-### Question 2
+#### Question 2
 
 **Using GoBuster against inlanefreight.com to fuzz for subdomains using the subdomains-top1million-5000.txt wordlist, which subdomain starts with the prefix "su"? Respond with the full vhost, eg web.inlanefreight.com:** [support.inlanefreight.com](http://support.inlanefreight.com/)
 
 ![image.png](/assets/img/module-5-web-fuzzing/module-5-web-fuzzing-image-10.png)
 
-## **SECTION 7: Filtering Fuzzing Output**
+### SECTION 7: Filtering Fuzzing Output
 
-### Question 1
+#### Question 1
 
 **What flag do you find when successfully fuzzing the POST parameter? HTB{p0st_fuzz1ng_succ3ss}**
 
 ![image.png](/assets/img/module-5-web-fuzzing/module-5-web-fuzzing-image-11.png)
 
-## **SECTION 8: Validating Findings**
+### SECTION 8: Validating Findings
 
-### **Question 1**
+#### Question 1
 
 ---
 
@@ -99,19 +100,19 @@ Using GoBuster against the target system to fuzz for vhosts using the common.txt
 
 ![image.png](/assets/img/module-5-web-fuzzing/module-5-web-fuzzing-image-14.png)
 
-## **SECTION 11: API Fuzzing**
+### SECTION 11: API Fuzzing
 
-### **Question 1**
+#### Question 1
 
 **What is the value returned by the endpoint that the api fuzzer has identified? h1dd3n_r357**
 
 ![image.png](/assets/img/module-5-web-fuzzing/module-5-web-fuzzing-image-15.png)
 
-## **SECTION 12: Skills Assessment**
+### SECTION 12: Skills Assessment
 
-All fuzzing can be completed using the `common.txt` SecLists Wordlist, found at `/usr/share/seclists/Discovery/Web-Content` on Pwnbox, or via the SecLists GitHub.
+All fuzzing can be completed using the `common.txt` SecLists Wordlist, found at `/usr/share/seclists/Discovery/Web-Content` on Pwnbox, or via the SecLists GitHub.
 
-## **Question 1**
+### Question 1
 
 ---
 

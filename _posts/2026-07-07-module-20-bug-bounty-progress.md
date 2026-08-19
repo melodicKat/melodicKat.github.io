@@ -3,16 +3,19 @@ title: "Module 20: Bug Bounty Progress"
 date: 2026-07-07 14:33:19 +0700
 categories: [hack-the-box, web-penetration-tester-path]
 tags: [learning, red-team, htb, cwes]
+render_with_liquid: false
 ---
 
-# SECTION 1: Bug Bounty Programs
+## SECTION 1: Bug Bounty Programs
 
-## Tổng Quan
+### Tổng Quan
 
 - **Bug Bounty Program (BBP)** / **Vulnerability Rewards Program (VRP)**: chương trình kiểm thử bảo mật liên tục, bổ sung cho code audit và pentest nội bộ.
 - Khác với **Vulnerability Disclosure Program (VDP)**: VDP chỉ cung cấp hướng dẫn báo cáo, không có phần thưởng tiền mặt.
+
 ---
-## Phân Loại
+
+### Phân Loại
 
 |Loại|Mô tả|
 |---|---|
@@ -21,7 +24,8 @@ tags: [learning, red-team, htb, cwes]
 |**Parent/Child Program**|Công ty mẹ và công ty con dùng chung bounty pool + security team|
 
 ---
-## Cấu Trúc Bug Bounty Program
+
+### Cấu Trúc Bug Bounty Program
 
 - Vendor Response SLAs
 - Access (tạo/lấy account để nghiên cứu)
@@ -39,11 +43,12 @@ tags: [learning, red-team, htb, cwes]
 > Đọc kỹ policy và code of conduct trước khi tham gia — tránh mất thời gian và vi phạm.
 
 ---
-## Tìm Bug Bounty Programs
+
+### Tìm Bug Bounty Programs
 
 - **HackerOne Directory**: tìm chương trình theo tổ chức, xem contact info để report.
 
-# SECTION 2: Writing a Good Report
+## SECTION 2: Writing a Good Report
 
 ---
 
@@ -66,19 +71,19 @@ Readable and well-formatted bug reports can drastically minimize both vulnerabil
 
 ---
 
-## Why CWE & CVSS?
+### Why CWE & CVSS?
 
-MITRE describes [Common Weaknesses Enumeration (CWE)](https://cwe.mitre.org/) as a community-developed list of software and hardware weakness types. It serves as a common language, a measuring stick for security tools, and as a baseline for weakness identification, mitigation, and prevention efforts. In the case of a vulnerability chain, choose a CWE related to the initial vulnerability.
+MITRE describes [Common Weaknesses Enumeration (CWE)](https://cwe.mitre.org/) as a community-developed list of software and hardware weakness types. It serves as a common language, a measuring stick for security tools, and as a baseline for weakness identification, mitigation, and prevention efforts. In the case of a vulnerability chain, choose a CWE related to the initial vulnerability.
 
-When it comes to communicating the severity of an identified vulnerability, then [Common Vulnerability Scoring System (CVSS)](https://www.first.org/cvss/) should be used, as it is a published standard used by organizations worldwide.
+When it comes to communicating the severity of an identified vulnerability, then [Common Vulnerability Scoring System (CVSS)](https://www.first.org/cvss/) should be used, as it is a published standard used by organizations worldwide.
 
 ---
 
-## Using CVSS Calculator
+### Using CVSS Calculator
 
-Let us now see how we can use the [CVSS v3.1 Calculator](https://www.first.org/cvss/calculator/3.1) identify the severity of an identified vulnerability.
+Let us now see how we can use the [CVSS v3.1 Calculator](https://www.first.org/cvss/calculator/3.1) identify the severity of an identified vulnerability.
 
-We will focus on the `Base Score` area only.
+We will focus on the `Base Score` area only.
 
 ![CVSS calculator interface showing sections for Base, Temporal, and Environmental scores with options for attack vector, complexity, privileges, and more.](https://cdn.services-k8s.prod.aws.htb.systems/content/modules/161/14.png)
 
@@ -86,67 +91,67 @@ We will focus on the `Base Score` area only.
 
 Shows how the vulnerability can be exploited.
 
-- `Network (N):` Attackers can only exploit this vulnerability through the network layer (remotely exploitable).
-- `Adjacent (A):` Attackers can exploit this vulnerability only if they reside in the same physical or logical network (secure VPN included).
-- `Local (L):` Attackers can exploit this vulnerability only by accessing the target system locally (e.g., keyboard, terminal, etc.) or remotely (e.g., SSH) or through user interaction.
-- `Physical (P):` Attackers can exploit this vulnerability through physical interaction/manipulation.
+- `Network (N):` Attackers can only exploit this vulnerability through the network layer (remotely exploitable).
+- `Adjacent (A):` Attackers can exploit this vulnerability only if they reside in the same physical or logical network (secure VPN included).
+- `Local (L):` Attackers can exploit this vulnerability only by accessing the target system locally (e.g., keyboard, terminal, etc.) or remotely (e.g., SSH) or through user interaction.
+- `Physical (P):` Attackers can exploit this vulnerability through physical interaction/manipulation.
 
-#### Attack Complexity
+##### Attack Complexity
 
 Depicts the conditions beyond the attackers' control and must be present to exploit the vulnerability successfully.
 
-- `Low (L):` No special preparations should take place to exploit the vulnerability successfully. The attackers can exploit the vulnerability repeatedly without any issue.
-- `High (H):` Special preparations and information gathering should take place to exploit the vulnerability successfully.
+- `Low (L):` No special preparations should take place to exploit the vulnerability successfully. The attackers can exploit the vulnerability repeatedly without any issue.
+- `High (H):` Special preparations and information gathering should take place to exploit the vulnerability successfully.
 
-#### Privileges Required
+##### Privileges Required
 
 Show the level of privileges the attacker must have to exploit the vulnerability successfully.
 
-- `None (N):` No special access related to settings or files is required to exploit the vulnerability successfully. The vulnerability can be exploited from an unauthorized perspective.
-- `Low (L):` Attackers should possess standard user privileges to exploit the vulnerability successfully. The exploitation in this case usually affects files and settings owned by a user or non-sensitive assets.
-- `High (H):` Attackers should possess admin-level privileges to exploit the vulnerability successfully. The exploitation in this case usually affects the entire vulnerable system.
+- `None (N):` No special access related to settings or files is required to exploit the vulnerability successfully. The vulnerability can be exploited from an unauthorized perspective.
+- `Low (L):` Attackers should possess standard user privileges to exploit the vulnerability successfully. The exploitation in this case usually affects files and settings owned by a user or non-sensitive assets.
+- `High (H):` Attackers should possess admin-level privileges to exploit the vulnerability successfully. The exploitation in this case usually affects the entire vulnerable system.
 
-#### User Interaction
+##### User Interaction
 
 Shows if attackers can successfully exploit the vulnerability on their own or user interaction is required.
 
-- `None (N):` Attackers can successfully exploit the vulnerability independently.
-- `Required (R):` A user should take some action before the attackers can successfully exploit the vulnerability.
+- `None (N):` Attackers can successfully exploit the vulnerability independently.
+- `Required (R):` A user should take some action before the attackers can successfully exploit the vulnerability.
 
-#### Scope
+##### Scope
 
 Shows if successful exploitation of the vulnerability can affect components other than the affected one.
 
-- `Unchanged (U):` Successful exploitation of the vulnerability affects the vulnerable component or affects resources managed by the same security authority.
-- `Changed (C):` Successful exploitation of the vulnerability can affect components other than the affected one or resources beyond the scope of the affected component's security authority.
+- `Unchanged (U):` Successful exploitation of the vulnerability affects the vulnerable component or affects resources managed by the same security authority.
+- `Changed (C):` Successful exploitation of the vulnerability can affect components other than the affected one or resources beyond the scope of the affected component's security authority.
 
-#### Confidentiality
+##### Confidentiality
 
 Shows how much the vulnerable component's confidentiality is affected upon successfully exploiting the vulnerability. Confidentiality limits information access and disclosure to authorized users only and prevents unauthorized users from accessing information.
 
-- `None (N):` The confidentiality of the vulnerable component does not get impacted.
-- `Low (L):` The vulnerable component will experience some loss of confidentiality upon successful exploitation of the vulnerability. In this case, the attackers do not have control over what information is obtained.
-- `High (H):` The vulnerable component will experience total (or serious) loss of confidentiality upon successfully exploiting the vulnerability. In this case, the attackers have total (or some) control over what information is obtained.
+- `None (N):` The confidentiality of the vulnerable component does not get impacted.
+- `Low (L):` The vulnerable component will experience some loss of confidentiality upon successful exploitation of the vulnerability. In this case, the attackers do not have control over what information is obtained.
+- `High (H):` The vulnerable component will experience total (or serious) loss of confidentiality upon successfully exploiting the vulnerability. In this case, the attackers have total (or some) control over what information is obtained.
 
-#### Integrity
+##### Integrity
 
 Shows how much the vulnerable component's integrity is affected upon successfully exploiting the vulnerability. Integrity refers to the trustworthiness and veracity of information.
 
-- `None (N):` The integrity of the vulnerable component does not get impacted.
-- `Low (L):` Attackers can modify data in a limited manner on the vulnerable component upon successfully exploiting the vulnerability. Attackers do not have control over the consequence of a modification, and the vulnerable component does not get seriously affected in this case.
-- `High (H):` Attackers can modify all or critical data on the vulnerable component upon successfully exploiting the vulnerability. Attackers have control over the consequence of a modification, and the vulnerable component will experience a total loss of integrity.
+- `None (N):` The integrity of the vulnerable component does not get impacted.
+- `Low (L):` Attackers can modify data in a limited manner on the vulnerable component upon successfully exploiting the vulnerability. Attackers do not have control over the consequence of a modification, and the vulnerable component does not get seriously affected in this case.
+- `High (H):` Attackers can modify all or critical data on the vulnerable component upon successfully exploiting the vulnerability. Attackers have control over the consequence of a modification, and the vulnerable component will experience a total loss of integrity.
 
-#### Availability
+##### Availability
 
 Shows how much the vulnerable component's availability is affected upon successfully exploiting the vulnerability. Availability refers to the accessibility of information resources in terms of network bandwidth, disk space, processor cycles, etc.
 
-- `None (N):` The availability of the vulnerable component does not get impacted.
-- `Low (L):` The vulnerable component will experience some loss of availability upon successfully exploiting the vulnerability. The attacker does not have complete control over the vulnerable component's availability and cannot deny the service to users, and performance is just reduced.
-- `High (H):` The vulnerable component will experience total (or severe) availability loss upon successfully exploiting the vulnerability. The attacker has complete (or significant) control over the vulnerable component's availability and can deny the service to users. Performance is significantly reduced.
+- `None (N):` The availability of the vulnerable component does not get impacted.
+- `Low (L):` The vulnerable component will experience some loss of availability upon successfully exploiting the vulnerability. The attacker does not have complete control over the vulnerable component's availability and cannot deny the service to users, and performance is just reduced.
+- `High (H):` The vulnerable component will experience total (or severe) availability loss upon successfully exploiting the vulnerability. The attacker has complete (or significant) control over the vulnerable component's availability and can deny the service to users. Performance is significantly reduced.
 
 ---
 
-## Examples
+### Examples
 
 Find below some examples of using CVSS 3.1 to communicate the severity of vulnerabilities.
 
@@ -180,7 +185,7 @@ Find below some examples of using CVSS 3.1 to communicate the severity of vulner
 
 ---
 
-## Good Report Examples
+### Good Report Examples
 
 Find below some good report examples selected by HackerOne:
 
@@ -191,8 +196,9 @@ Find below some good report examples selected by HackerOne:
 - [XSS while logging in using Google](https://hackerone.com/reports/691611)
 - [Cross-site Scripting (XSS) on HackerOne careers page](https://hackerone.com/reports/474656)
 
-Please refer to the [Submitting Reports](https://docs.hackerone.com/hackers/submitting-reports.html) section of HackerOne's docs portal for the actual process a bug bounty hunter has to follow to submit a bug report.
-# SECTION 3: Interacting with Organizations/BBP Hosts
+Please refer to the [Submitting Reports](https://docs.hackerone.com/hackers/submitting-reports.html) section of HackerOne's docs portal for the actual process a bug bounty hunter has to follow to submit a bug report.
+
+## SECTION 3: Interacting with Organizations/BBP Hosts
 
 ---
 
@@ -200,7 +206,7 @@ Suppose that you have submitted a bug report. How should you interact with the s
 
 Well, to begin with, do not interact with them. Allow the security/triage team some time to process your report, validate your finding, and maybe ask questions. Some bug bounty programs/platforms include vendor response SLAs or response efficiency metrics, which can give you an idea of how long it can take for them to get back to a submission. Also, make sure that you do not spam the security/triage team within a short period of time.
 
-If the security/triage team does not get back to you in a reasonable amount of time, then if the submission was through a bug bounty platform, you can contact [Mediation](https://docs.hackerone.com/hackers/hacker-mediation.html).
+If the security/triage team does not get back to you in a reasonable amount of time, then if the submission was through a bug bounty platform, you can contact [Mediation](https://docs.hackerone.com/hackers/hacker-mediation.html).
 
 Once the security/triage team gets back to you, note the team member's username and tag them in any future communications since they will probably be dealing with your submission. Do not interact with the security/triage team through any unofficial communication channel (social media etc.)!
 
@@ -211,13 +217,14 @@ During your interaction with the security/triage team, there could be disagreeme
 - Explain your rationale for choosing this severity score and guide the security/triage team through each metric value you specified in the CVSS calculator. Eventually, you will come to an agreement.
 - Go over the bug bounty program's policy and scope and ensure that your submission complies with both. Also, make sure that the bounty amount resembles the policy of the bug bounty program.
 - If none of the above was fruitful, contact mediation or a similar platform service.
-# SECTION 4: Example 1 - Reporting Stored XSS
+
+## SECTION 4: Example 1 - Reporting Stored XSS
 
 ---
 
 `Title`: Stored Cross-Site Scripting (XSS) in X Admin Panel
 
-`CWE`: [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)
+`CWE`: [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)
 
 `CVSS 3.1 Score`: 5.5 (Medium)
 
@@ -229,37 +236,40 @@ During your interaction with the security/triage team, there could be disagreeme
 
 Step 1: A malicious administrator could leverage the fact that the filename value is reflected back to the browser and stored in the web application’s database to perform cross-site scripting attacks against other administrators by uploading a file containing malicious JavaScript code into its filename. The attack is feasible because administrators can view all uploaded files regardless of the uploader. Specifically, we named the file, as follows, using a Linux machine.
 
-        javascript
-`"><svg onload = alert(document.cookie)>.docx`
+```text
+"><svg onload = alert(document.cookie)>.docx
+```
 
 ![File upload interface showing a potentially malicious file.](https://cdn.services-k8s.prod.aws.htb.systems/content/modules/161/2.png)
 
 Step 2: When another administrator clicks the view button to open the abovementioned file, the malicious JavaScript code in the file’s filename will be executed on the browser.
 
-![Admin interface showing uploaded files, including a highlighted file named 'malicious_filename' uploaded by Pentest Admin01.](https://cdn.services-k8s.prod.aws.htb.systems/content/modules/161/3.png)![Admin interface with a session alert popup displaying session details for Pentest Admin02.](https://cdn.services-k8s.prod.aws.htb.systems/content/modules/161/4.png)
+![Admin interface showing uploaded files, including a highlighted file named 'malicious_filename' uploaded by Pentest Admin01.](https://cdn.services-k8s.prod.aws.htb.systems/content/modules/161/3.png)
+
+![Admin interface with a session alert popup displaying session details for Pentest Admin02.](https://cdn.services-k8s.prod.aws.htb.systems/content/modules/161/4.png)
 
 ---
 
-## CVSS Score Breakdown
+### CVSS Score Breakdown
 
-| Metric | Value |  
-|---------|-------|  
-| **Attack Vector** | Network — The attack can be mounted over the Internet. |  
-| **Attack Complexity** | Low — The attacker only needs to upload a filename containing the XSS payload. |  
-| **Privileges Required** | High — Administrative privileges are required. |  
-| **User Interaction** | None — Other administrators trigger the payload simply by browsing the page. |  
-| **Scope** | Changed — The vulnerable component is the web server, while the impacted component is the victim's browser. |  
-| **Confidentiality** | Low — DOM access is possible. |  
-| **Integrity** | Low — The attacker can manipulate client-side behavior. |  
+| Metric | Value |
+|---------|-------|
+| **Attack Vector** | Network — The attack can be mounted over the Internet. |
+| **Attack Complexity** | Low — The attacker only needs to upload a filename containing the XSS payload. |
+| **Privileges Required** | High — Administrative privileges are required. |
+| **User Interaction** | None — Other administrators trigger the payload simply by browsing the page. |
+| **Scope** | Changed — The vulnerable component is the web server, while the impacted component is the victim's browser. |
+| **Confidentiality** | Low — DOM access is possible. |
+| **Integrity** | Low — The attacker can manipulate client-side behavior. |
 | **Availability** | None — No denial-of-service impact. |
 
-# SECTION 5: Example 2 - Reporting CSRF
+## SECTION 5: Example 2 - Reporting CSRF
 
 ---
 
 `Title`: Cross-Site Request Forgery (CSRF) in Consumer Registration
 
-`CWE`: [CWE-352: Cross-Site Request Forgery (CSRF)](https://cwe.mitre.org/data/definitions/352.html)
+`CWE`: [CWE-352: Cross-Site Request Forgery (CSRF)](https://cwe.mitre.org/data/definitions/352.html)
 
 `CVSS 3.1 Score`: 5.4 (Medium)
 
@@ -271,7 +281,9 @@ Step 2: When another administrator clicks the view button to open the abovementi
 
 Step 1: Using an intercepting proxy, we looked into the request to create a new fintech application. We noticed no anti-CSRF protections being in place.
 
-![Application registration form with fields for application type, name, description, and developer email.](https://cdn.services-k8s.prod.aws.htb.systems/content/modules/161/5.png)![HTTP POST request to /consumer-registration with parameters for app type, name, developer email, and description.](https://cdn.services-k8s.prod.aws.htb.systems/content/modules/161/6.png)
+![Application registration form with fields for application type, name, description, and developer email.](https://cdn.services-k8s.prod.aws.htb.systems/content/modules/161/5.png)
+
+![HTTP POST request to /consumer-registration with parameters for app type, name, developer email, and description.](https://cdn.services-k8s.prod.aws.htb.systems/content/modules/161/6.png)
 
 Step 2: We used the abovementioned request to craft a malicious HTML page that, if visited by a victim with an active session, a cross-site request will be performed, resulting in the advertent creation of an attacker-specific fintech application.
 
@@ -287,7 +299,7 @@ Step 4: The result would be the inadvertent creation of a new fintech applicatio
 
 ---
 
-## CVSS Score Breakdown
+### CVSS Score Breakdown
 
 | Metric                  | Value                                                                                         |     |
 | ----------------------- | --------------------------------------------------------------------------------------------- | --- |
@@ -299,17 +311,18 @@ Step 4: The result would be the inadvertent creation of a new fintech applicatio
 | **Confidentiality**     | Low — Limited information disclosure is possible.                                             |     |
 | **Integrity**           | Low — The attacker can create an application on behalf of the victim.                         |     |
 | **Availability**        | None — No denial-of-service impact.                                                           |     |
-# Example 3: Reporting RCE
+
+## Example 3: Reporting RCE
 
 ---
 
 `Title`: IBM WebSphere Java Object Deserialization RCE
 
-`CWE`: [CWE-502: Deserialization of Untrusted Data](https://cwe.mitre.org/data/definitions/502.html)
+`CWE`: [CWE-502: Deserialization of Untrusted Data](https://cwe.mitre.org/data/definitions/502.html)
 
 `CVSS 3.1 Score`: 9.8 (Critical)
 
-`Description`: During our testing activities, we identified that the remote WebSphere application server is affected by a vulnerability related to insecure Java object deserialization allowing remote attackers to execute arbitrary commands. By issuing a request to the remote WebSphere application server over HTTPS on port 8880, we identified the existence of raw, serialized Java objects that were base64-encoded. It is possible to identify base64 encoded serialized Java objects by the "rO0" header. We were able to craft a SOAP request containing a serialized Java object that can exploit the aforementioned vulnerability in the Apache Commons Collections (ACC) library used by the WebSphere application server. The crafted Java object contained a `ping` command to be executed by the affected system.
+`Description`: During our testing activities, we identified that the remote WebSphere application server is affected by a vulnerability related to insecure Java object deserialization allowing remote attackers to execute arbitrary commands. By issuing a request to the remote WebSphere application server over HTTPS on port 8880, we identified the existence of raw, serialized Java objects that were base64-encoded. It is possible to identify base64 encoded serialized Java objects by the "rO0" header. We were able to craft a SOAP request containing a serialized Java object that can exploit the aforementioned vulnerability in the Apache Commons Collections (ACC) library used by the WebSphere application server. The crafted Java object contained a `ping` command to be executed by the affected system.
 
 `Impact`: Command injection vulnerabilities typically occur when data enters the application from an untrusted source, such as a terminal or a network socket, without authenticating the source, or the data is part of a string that is executed as a command by the application, again without validating the input against a predefined list of allowed commands, such as a whitelist. The application executes the provided command under the current user's security context. If the application is executed as a privileged user, administrative or driver interface, such as the SYSTEM account, it can potentially allow the complete takeover of the affected system.
 
@@ -319,14 +332,15 @@ Step 1: We identified that the application uses serialized data objects by captu
 
 ![HTTP GET request to 192.168.44.63:8880 with XML error response showing SOAP fault details.](https://cdn.services-k8s.prod.aws.htb.systems/content/modules/161/10.png)
 
-Step 2: We crafted a SOAP request containing a command to be executed by the remote server. The command would send `ping` messages from the affected server to our host. The image below displays the crafted request and its decoded payload.
+Step 2: We crafted a SOAP request containing a command to be executed by the remote server. The command would send `ping` messages from the affected server to our host. The image below displays the crafted request and its decoded payload.
 
 ![Burp Suite Decoder showing a base64 encoded string and its decoded Java object content.](https://cdn.services-k8s.prod.aws.htb.systems/content/modules/161/11.png)
 
-Step 3: The following image displays the crafted SOAP request allowing to remotely execute a `ping` command from the affected system. Capturing traffic via Wireshark, we observed the `ping` request from the Websphere application server to our machine.
+Step 3: The following image displays the crafted SOAP request allowing to remotely execute a `ping` command from the affected system. Capturing traffic via Wireshark, we observed the `ping` request from the Websphere application server to our machine.
+
 ![](/assets/img/module-20-bug-bounty-progress/module-20-bug-bounty-progress-5c8b28d7a365bda0e19604add2e11a62.png)
 
-## CVSS Score Breakdown
+### CVSS Score Breakdown
 
 | Metric | Value |
 |---------|-------|
