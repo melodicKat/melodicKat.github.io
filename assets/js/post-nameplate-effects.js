@@ -203,7 +203,7 @@
 
   const hideAndPause = () => {
     layers.forEach(({ layer, video }) => {
-      layer.classList.remove('is-visible', 'is-static');
+      layer.classList.remove('is-visible', 'is-static', 'is-profile-start');
       video.pause();
     });
   };
@@ -236,6 +236,7 @@
       fadeTimer: null,
       finishingPromise: null,
       betweenCycles: false,
+      firstCycle: true,
       staticFallback: false
     };
   };
@@ -321,7 +322,11 @@
     while (run.generation === generation && document.documentElement.contains(postPreviews[0])) {
       run.betweenCycles = false;
       run.fadeStartedAt = null;
-      layers.forEach(({ layer }) => layer.classList.add('is-visible'));
+      layers.forEach(({ layer }) => {
+        layer.classList.toggle('is-profile-start', run.firstCycle);
+        layer.classList.add('is-visible');
+      });
+      run.firstCycle = false;
 
       layers.forEach(({ video }) => {
         video.currentTime = 0;
