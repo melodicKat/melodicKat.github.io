@@ -4,140 +4,192 @@ title: About
 permalink: /about/
 icon: fas fa-user
 order: 4
----
-## 👋 Hello!
-
-I'm **Nguyễn Giáp Anh Khoa**, a third-year Information Security student at **Ho Chi Minh City University of Industry and Trade (HUIT)**, expected to graduate in **2027**.
-
-My primary interest is **Offensive Security**, especially **Web Application Penetration Testing**. I enjoy learning by solving real-world security labs, participating in CTF competitions, and building home labs to understand both attack techniques and defensive mechanisms.
-
-My goal is to become a professional **Penetration Tester** capable of identifying vulnerabilities and helping organizations improve their security posture.
-
+toc: false
 ---
 
-## 🎯 Areas of Interest
+<div class="about-page">
+  <section class="about-hero">
+    <div class="about-hero__content">
+      <p class="about-kicker">Information Security Student</p>
+      <h2>Hi, I'm Nguyễn Giáp Anh Khoa.</h2>
+      <p class="about-lead">
+        I explore offensive security through hands-on labs, CTF competitions,
+        and projects that turn security concepts into practical experience.
+      </p>
 
-- Web Application Penetration Testing
-- Network Penetration Testing
-- Active Directory Security
+      <div class="about-meta">
+        <span>HUIT · Class of 2027</span>
+        <span>Bien Hoa, Vietnam</span>
+      </div>
 
----
+      <div class="about-actions">
+        <a class="about-button about-button--primary" href="https://github.com/{{ site.github.username }}" target="_blank" rel="noopener noreferrer">
+          GitHub
+        </a>
+        <a class="about-button" href="mailto:{{ site.social.email }}">
+          Contact me
+        </a>
+      </div>
+    </div>
+  </section>
 
-## 🛠 Technical Skills
+  <section class="about-section">
+    <div class="about-section__heading">
+      <div><p>Focus</p><h2>What I am working toward</h2></div>
+    </div>
 
-### Programming
+    <p>
+      My primary interest is <strong>Offensive Security</strong>, especially
+      <strong>Web Application Penetration Testing</strong>. My goal is to become
+      a professional penetration tester who can identify vulnerabilities and
+      help organizations improve their security posture.
+    </p>
 
-- C/C++
-- C#
-- Basic Python
+    <div class="about-focus-grid">
+      <article class="about-card">
+        <h3>Web Security</h3>
+        <p>Testing modern web applications, APIs, authentication flows, and access controls.</p>
+      </article>
+      <article class="about-card">
+        <h3>Network Security</h3>
+        <p>Enumeration, traffic analysis, service assessment, and attack-path discovery.</p>
+      </article>
+      <article class="about-card">
+        <h3>Active Directory</h3>
+        <p>Building foundational knowledge of Windows domains, privilege paths, and exploitation.</p>
+      </article>
+    </div>
+  </section>
 
-### Security
+  <section class="about-section">
+    <div class="about-section__heading">
+      <div><p>Toolkit</p><h2>Technical skills</h2></div>
+    </div>
 
-- Burp Suite
-- Nmap
-- Wireshark
-- Metasploit
-- Gobuster
-- SQLMap
-- FFUF
-- John the Ripper
-- Hashcat
+    <div class="about-skill-grid">
+      <div class="about-skill-group">
+        <h3>Programming</h3>
+        <div class="about-chips"><span>C/C++</span><span>C#</span><span>Python</span></div>
+      </div>
+      <div class="about-skill-group">
+        <h3>Security tools</h3>
+        <div class="about-chips">
+          <span>Burp Suite</span><span>Nmap</span><span>Wireshark</span>
+          <span>Metasploit</span><span>Gobuster</span><span>SQLmap</span>
+          <span>FFUF</span><span>John the Ripper</span><span>Hashcat</span>
+        </div>
+      </div>
+      <div class="about-skill-group">
+        <h3>Operating systems</h3>
+        <div class="about-chips"><span>Kali Linux</span><span>Ubuntu</span><span>Windows</span></div>
+      </div>
+      <div class="about-skill-group">
+        <h3>Knowledge</h3>
+        <div class="about-chips">
+          <span>TCP/IP</span><span>Linux</span><span>OWASP Top 10</span>
+          <span>Web Security</span><span>Active Directory</span>
+        </div>
+      </div>
+    </div>
+  </section>
 
-### Operating Systems
+  <section class="about-section">
+    <div class="about-section__heading">
+      <div><p>Hands-on</p><h2>Practical experience</h2></div>
+    </div>
 
-- Kali Linux
-- Ubuntu
-- Windows
+    <div class="about-experience">
+      <p>
+        I continuously improve through security labs and Capture The Flag competitions.
+        I participated in <strong>BKISC CTF 2026</strong> and <strong>THCon CTF 2026</strong>,
+        solving beginner Web and OSINT challenges.
+      </p>
+      <div class="about-chips about-chips--accent">
+        <span>SQL Injection</span><span>XSS</span><span>Authentication</span>
+        <span>Authorization</span><span>File Inclusion</span><span>File Upload</span>
+        <span>Reconnaissance</span><span>Linux Privilege Escalation</span>
+        <span>Active Directory</span>
+      </div>
+    </div>
+  </section>
 
-### Knowledge
+  <section class="about-section">
+    <div class="about-section__heading">
+      <div><p>Build</p><h2>Featured projects</h2></div>
+    </div>
 
-- TCP/IP & Networking
-- Linux Fundamentals
-- OWASP Top 10 (2021)
-- Web Security
-- Basic Active Directory
+    <div class="about-project-grid">
+      <article class="about-project-card">
+        <div class="about-project-card__top"><span>01</span></div>
+        <h3>Phishing Simulation Lab</h3>
+        <p>
+          A controlled lab using OWASP Juice Shop, Nginx, Evilginx2, and GoPhish
+          to study Browser-in-the-Browser, clickjacking, homograph attacks, and proxy phishing.
+        </p>
+        <div class="about-project-card__tags"><span>GoPhish</span><span>Evilginx2</span><span>Nginx</span></div>
+      </article>
 
----
+      <article class="about-project-card">
+        <div class="about-project-card__top"><span>02</span></div>
+        <h3>DoS / DDoS Home Lab</h3>
+        <p>
+          A virtual environment with Kali Linux, Ubuntu, and Windows for simulating attacks,
+          analyzing traffic in Wireshark, and evaluating firewall and IP-blocking mitigations.
+        </p>
+        <div class="about-project-card__tags"><span>Wireshark</span><span>Networking</span><span>Mitigation</span></div>
+      </article>
+    </div>
+  </section>
 
-## 🚩 Practical Experience
+  <section class="about-section about-learning-section">
+    <div class="about-section__heading">
+      <div><p>Now</p><h2>Current learning</h2></div>
+    </div>
 
-I continuously improve my practical skills through security labs and Capture The Flag (CTF) competitions.
+    <div class="about-learning-grid">
+      <ul class="about-check-list">
+        <li>Hack The Box Academy Penetration Tester Path</li>
+        <li>Web Application Security</li>
+        <li>Active Directory Exploitation</li>
+        <li>Privilege Escalation</li>
+        <li>Malware Analysis</li>
+        <li>Technical Report Writing</li>
+      </ul>
 
-Some of the topics I have worked on include:
+      <div class="about-platforms">
+        <p>Learning platforms</p>
+        <span>Hack The Box Academy</span><span>TryHackMe</span>
+        <span>PortSwigger Academy</span><span>picoCTF</span>
+        <span>Cisco Ethical Hacker</span>
+      </div>
+    </div>
+  </section>
 
-- SQL Injection
-- Cross-Site Scripting (XSS)
-- Authentication & Authorization flaws
-- Local File Inclusion
-- File Upload vulnerabilities
-- Reconnaissance & Enumeration
-- Privilege Escalation (Linux)
-- Basic Active Directory attacks
+  <section class="about-section">
+    <div class="about-section__heading">
+      <div><p>Elsewhere</p><h2>Find me online</h2></div>
+    </div>
 
-I have also participated in CTF competitions such as **BKISC CTF 2026** and **THCon CTF 2026**, where I solved beginner Web and OSINT challenges.
+    <div class="about-link-grid">
+      <a href="{{ '/' | relative_url }}">
+        <span><strong>Blog</strong><small>Notes and write-ups</small></span>
+      </a>
+      <a href="https://profile.hackthebox.com/profile/019dd773-0480-72a9-918b-6f84c2e96be1" target="_blank" rel="noopener noreferrer">
+        <span><strong>Hack The Box</strong><small>Academy progress</small></span>
+      </a>
+      <a href="https://tryhackme.com/p/GekkoGecko" target="_blank" rel="noopener noreferrer">
+        <span><strong>TryHackMe</strong><small>Hands-on rooms</small></span>
+      </a>
+      <a href="https://ctf.osint.industries/users/4244" target="_blank" rel="noopener noreferrer">
+        <span><strong>OSINT Industries</strong><small>OSINT challenges</small></span>
+      </a>
+    </div>
+  </section>
 
----
-
-## 📚 Learning Platforms
-
-I'm learning, and developed my self by involve in these learing platfoms
-
-- Hack The Box Academy
-- TryHackMe
-- PortSwigger Web Security Academy
-- picoCTF
-- Cisco Ethical Hacker
-  
----
-
-## 🚀 Featured Projects
-
-### 🔹 Phishing Simulation Lab
-
-Built a phishing laboratory using:
-
-- OWASP Juice Shop
-- Nginx Reverse Proxy
-- Evilginx2
-- GoPhish
-
-Studied phishing techniques including Browser-in-the-Browser, Clickjacking, Homograph attacks, and Proxy Phishing.
-
----
-
-### 🔹 DoS / DDoS Home Lab
-
-Built a virtual lab consisting of Kali Linux, Ubuntu and Windows machines to simulate DoS/DDoS attacks.
-
-Used Wireshark to analyze attack traffic and evaluated mitigation techniques including firewall rules, monitoring and IP blocking.
-
----
-
-## 📈 Current Learning
-
-Currently focusing on:
-
-- Hack The Box Academy Penetration Tester Path
-- Web Application Security
-- Active Directory Exploitation
-- Privilege Escalation
-- Malware Analysis
-- Report Writing
-
----
-
-## 🌐 Profiles
-
-- **Blog:** https://melodickat.github.io
-- **Hack The Box:** https://profile.hackthebox.com/profile/019dd773-0480-72a9-918b-6f84c2e96be1
-- **TryHackMe:** https://tryhackme.com/p/GekkoGecko
-- **OSINT Industries:** https://ctf.osint.industries/users/4244
-
----
-
-## 📫 Contact
-
-- 📧 favcolbun@gmail.com
-- 📍 Bien Hoa, Dong Nai, Vietnam
-
----
+  <section class="about-cta">
+    <div><p>Let's connect</p><h2>Interested in security, CTFs, or building labs?</h2></div>
+    <a class="about-button about-button--primary" href="mailto:{{ site.social.email }}">
+      {{ site.social.email }}
+    </a>
+  </section>
+</div>
